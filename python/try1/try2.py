@@ -49,14 +49,15 @@ class MyPoint(object):
         groups: list[list[MyPoint], list[MyPoint], list[MyPoint], list[MyPoint]] = [[], [], [], []]
         for p in points_:
             index: int = int(center_point_.x < p.x) + int(center_point_.y < p.y) * 2
-            p.color = tuple([255 - 45 * index] * 3)
+            p.color = tuple([255 - 55 * index] * 3)
             groups[index].append(p)
 
         return groups
 
     @classmethod
     def draw_all(cls, screen_, points_: list[list[MyPoint, ...]]):
-        [i.draw(screen_) for i in chain(points_)]
+        print(points_)
+        [p.draw(screen_) for i in chain(points_) for p in (i if isinstance(i, list) else [i])]
 
     @classmethod
     def create_binary_tree_as_list(
@@ -85,6 +86,7 @@ class MyPoint(object):
                 MyPoint.draw_all(screen_, points_)
 
             new_points = MyPoint.division_4_groups(center_point, points_)
+            cls.draw_all(screen_, new_points)
             gens = [cls.create_binary_tree_as_list(
                 screen_, i, deep=deep + 1, yield_=yield_,
                 x_start_end=(x_start_end[0] + (0 if ind % 2 == 0 else abs(center_point.int_x - x_start_end[0])),
@@ -259,7 +261,7 @@ class MyPoint(object):
             return gen
 
     def __repr__(self):
-        return f'P({self.int_x}, {self.int_y}, {self.color[0] == self.color[1] == self.color[2]})'
+        return f'P({self.int_x}, {self.int_y}, {self.color[0] == self.color[1] == self.color[2]})'  # , {self.color[0] == self.color[1] == self.color[2]}
 
 
 def get_base(deep, _recursion_deep=0):
@@ -295,7 +297,7 @@ def main2():
     clock = pygame.time.Clock()
     running = True
     lines = []
-    points = [MyPoint(random.random() * (WIDTH - 20) + 10, random.random() * (HEIGHT - 20) + 10) for i in range(20)]
+    points = [MyPoint(random.random() * (WIDTH - 20) + 10, random.random() * (HEIGHT - 20) + 10) for i in range(40)]
     [i.draw(screen) for i in points]
     finding_map_ = dict()
     list_tree_as_dict = dict()
@@ -382,7 +384,7 @@ def main2():
 if __name__ == '__main__':
     print(get_index2(0, 0, 0, False, False))
     main2()
-    # print(*[[0]], sep='\n')
+    # print(*[[0]], '---', sep='\n')
     # st, end = 1, 5
     # last_arr = [[0]]
     # for deep in range(1, 5):
