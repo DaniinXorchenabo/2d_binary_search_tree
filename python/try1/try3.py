@@ -1,4 +1,7 @@
 from __future__ import annotations
+
+import os
+
 import pygame
 import random
 from itertools import chain
@@ -298,7 +301,25 @@ def testing2(last_m, next_m):
     print(*[', '.join(map(lambda i: str(i).center(4), i)) for i in next_m], "========", sep='\n')
 
 
+
+
 def main2():
+    from uuid import uuid4
+    from os import makedirs
+    from os.path import isfile, isdir, join, dirname
+
+    image_dir = str(uuid4())
+    count_imgs = 0
+
+    def save_img(screen):
+        nonlocal count_imgs, image_dir
+        pygame.display.flip()
+        dir_ = join(dirname(__file__), 'images', image_dir)
+        if not isdir(dir_):
+            makedirs(dir_)
+        pygame.image.save(screen, join(dir_, f"{count_imgs}.png"))
+        count_imgs += 1
+
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("My Game")
@@ -343,6 +364,7 @@ def main2():
                                 print('end!!!!!!!!!!!!!!!!')
 
                     ddd()
+                    save_img(screen)
                 if event.key == pygame.K_SPACE and can_create_point is True:  #
                     # print('K_SPACE')
                     if last_find_generator is not None:
@@ -360,6 +382,7 @@ def main2():
                             pass
                     except StopIteration as e:
                         print('err', e.args, [e])
+                    save_img(screen)
 
             if event.type == pygame.MOUSEBUTTONDOWN and can_create_point is True:
                 pos = pygame.mouse.get_pos()
@@ -382,6 +405,7 @@ def main2():
                             range(st, end, 2 ** (deep))], '---\n', sep='\n')
                     st, end = end, end + 4 ** (deep + 1)
                     last_arr = arr
+                save_img(screen)
                 # print(get_base(3))
                 # for deep in range(1, 5):
                 #     print(*[', '.join(map(lambda i: str(i).center(4), i)) for i in next_m], "========", sep='\n')
@@ -393,13 +417,13 @@ def main2():
 if __name__ == '__main__':
     print(get_index2(0, 0, 0, False, False))
     main2()
-    # print(*[[0]], sep='\n')
-    # st, end = 1, 5
-    # last_arr = [[0]]
-    # for deep in range(1, 5):
-    #     arr = [[i + j for j in range(2 ** (deep))] for i in range(st, end, 2 ** (deep))]
-    #     # testing2(last_arr, arr)
-    #     print(*[', '.join(map(lambda i: str(i).center(4), i)) for i in arr], '---\n', sep='\n')
-    #     st, end = end, end + 4 ** (deep + 1)
-    #     last_arr = arr
-    # print(get_base(3))
+    print(*[0],"---", sep='\n')
+    st, end = 1, 5
+    last_arr = [[0]]
+    for deep in range(1, 5):
+        arr = [[i + j for j in range(2 ** (deep))] for i in range(st, end, 2 ** (deep))]
+        # testing2(last_arr, arr)
+        print(*[', '.join(map(lambda i: str(i).center(4), i)) for i in arr], '---\n', sep='\n')
+        st, end = end, end + 4 ** (deep + 1)
+        last_arr = arr
+    print(get_base(3))
