@@ -327,7 +327,7 @@ def main2():
     clock = pygame.time.Clock()
     running = True
     lines = []
-    points = [MyPoint(random.random() * (WIDTH - 20) + 10, random.random() * (HEIGHT - 20) + 10) for i in range(40)]
+    points = [MyPoint(random.random() * (WIDTH - 20) + 10, random.random() * (HEIGHT - 20) + 10, (0 ,0 ,0)) for i in range(40)]
     [i.draw(screen) for i in points]
     finding_map_ = dict()
     list_tree_as_dict = dict()
@@ -337,6 +337,11 @@ def main2():
     find_generator = None
     last_find_generator = None
     tree_list = []
+    [i.draw(screen) for i in points if i.color]
+    pygame.display.flip()
+    [i.draw(screen) for i in points]
+    MyPoint.draw_all(screen, points)
+    save_img(screen)
 
     while running:
         for event in pygame.event.get():
